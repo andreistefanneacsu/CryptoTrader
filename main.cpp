@@ -94,9 +94,9 @@ public:
         return status;
     }
 
-    double get_ValoareTranzactie() const {
+/*    double get_ValoareTranzactie() const {
         return cantitate * pret;
-    }
+    }*/
 
     friend ostream &operator<<(ostream &os, const Tranzactie &tranzactie) {
         os << "[" << tranzactie.tip << "]: " << tranzactie.moneda.get_simbol() << " " << tranzactie.cantitate << " " << tranzactie.status;
@@ -232,10 +232,6 @@ public:
     }
     ~Utilizator() = default;
 
-    [[nodiscard]] Portofel get_portofel() const {
-        return portofel;
-    }
-
     void cumpara(const Moneda &moneda, double cantitate) {
         portofel.cumparaMoneda(moneda, cantitate);
     }
@@ -282,6 +278,8 @@ int main() {
     utilizator.vinde(bitcoin, 1);
 
     utilizator.vinde(ethereum, 5);
+
+    bitcoin.actualizarePret(10.5);
 
     cout << "Dupa vanzare:\n";
     utilizator.determinareValoarePortofel();
