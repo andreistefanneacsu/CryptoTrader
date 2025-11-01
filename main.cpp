@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -12,34 +13,55 @@ private:
     double volatilitate;
 
 public:
-    // Constructor initialization list to avoid uninitialized members
-    Moneda() : nume(""), simbol(""), pret(0.0), volatilitate(0.0) {}
-    Moneda(const string &nume, const string &simbol, double pret, double volatilitate)
-        : nume(nume), simbol(simbol), pret(pret), volatilitate(volatilitate) {}
+    Moneda() = default;
+    Moneda(const string &nume, const string &simbol, const double pret, const double volatilitate)
+        : nume(nume), simbol(simbol), pret(pret), volatilitate(volatilitate) {
+    }
 
     Moneda(const Moneda &moneda)
-        : nume(moneda.nume), simbol(moneda.simbol), pret(moneda.pret), volatilitate(moneda.volatilitate) {}
+        : nume(moneda.nume), simbol(moneda.simbol), pret(moneda.pret), volatilitate(moneda.volatilitate) {
+    }
 
     ~Moneda() = default;
 
-    // Explicit constructor to prevent implicit conversion
-    explicit Moneda(const string &nume, const string &simbol) : nume(nume), simbol(simbol), pret(0.0), volatilitate(0.0) {}
+    void set_nume(const string &nume) {
+        this->nume = nume;
+    }
 
-    void set_nume(const string &nume) { this->nume = nume; }
-    void set_simbol(const string &simbol) { this->simbol = simbol; }
-    void set_pret(double pret) { this->pret = pret; }
-    void set_volatilitate(double volatilitate) { this->volatilitate = volatilitate; }
+    void set_simbol(const string &simbol) {
+        this->simbol = simbol;
+    }
 
-    // Return by const reference for better performance
-    [[nodiscard]] const string& get_nume() const { return nume; }
-    [[nodiscard]] const string& get_simbol() const { return simbol; }
-    [[nodiscard]] double get_pret() const { return pret; }
-    [[nodiscard]] double get_volatilitate() const { return volatilitate; }
+    void set_pret(const double pret) {
+        this->pret = pret;
+    }
 
-    void actualizarePret(double procent) { this->pret = pret * (1 + procent / 100.0); }
+    void set_volatilitate(const double volatilitate) {
+        this->volatilitate = volatilitate;
+    }
 
-    Moneda& operator=(const Moneda &moneda) {
-        if (this != &moneda) {  // Avoid self-assignment
+    [[nodiscard]] string get_nume() const {
+        return nume;
+    }
+
+    [[nodiscard]] string get_simbol() const {
+        return simbol;
+    }
+
+    [[nodiscard]] double get_pret() const {
+        return pret;
+    }
+
+    [[nodiscard]] double get_volatilitate() const {
+        return volatilitate;
+    }
+
+    void actualizarePret(double procent) {
+        this->pret = pret * (1 + procent / 100.0);
+    }
+
+    Moneda &operator=(const Moneda &moneda) {
+        if (this != &moneda) {  // Self-assignment check
             this->nume = moneda.nume;
             this->simbol = moneda.simbol;
             this->pret = moneda.pret;
@@ -49,7 +71,7 @@ public:
     }
 
     friend ostream &operator<<(ostream &os, const Moneda &moneda) {
-        os << moneda.nume << " (" << moneda.simbol << ")" << ": " << moneda.pret << " EUR";
+        os << moneda.nume << " (" << moneda.simbol << "): " << moneda.pret << " EUR";
         return os;
     }
 };
@@ -62,28 +84,52 @@ private:
     bool status;
 
 public:
-    // Constructor initialization list to avoid uninitialized members
-    Tranzactie() : moneda(), tip(""), cantitate(0.0), status(false) {}
-    Tranzactie(const Moneda &moneda, const string &tip, double cantitate, bool status)
-        : moneda(moneda), tip(tip), cantitate(cantitate), status(status) {}
+    Tranzactie() = default;
+    Tranzactie(const Moneda &moneda, const string &tip, const double cantitate, const bool status)
+        : moneda(moneda), tip(tip), cantitate(cantitate), status(status) {
+    }
 
     Tranzactie(const Tranzactie &tranzactie)
-        : moneda(tranzactie.moneda), tip(tranzactie.tip), cantitate(tranzactie.cantitate), status(tranzactie.status) {}
+        : moneda(tranzactie.moneda), tip(tranzactie.tip), cantitate(tranzactie.cantitate), status(tranzactie.status) {
+    }
 
     ~Tranzactie() = default;
 
-    void set_moneda(const Moneda &moneda) { this->moneda = moneda; }
-    void set_tip(const string &tip) { this->tip = tip; }
-    void set_cantitate(double cantitate) { this->cantitate = cantitate; }
-    void set_status(bool status) { this->status = status; }
+    void set_moneda(const Moneda &moneda) {
+        this->moneda = moneda;
+    }
 
-    // Return by const reference for better performance
-    [[nodiscard]] const Moneda& get_moneda() const { return moneda; }
-    [[nodiscard]] const string& get_tip() const { return tip; }
-    [[nodiscard]] double get_cantitate() const { return cantitate; }
-    [[nodiscard]] bool get_status() const { return status; }
+    void set_tip(const string &tip) {
+        this->tip = tip;
+    }
 
-    double get_valoareTranzactie() const { return cantitate * moneda.get_pret(); }
+    void set_cantitate(const double cantitate) {
+        this->cantitate = cantitate;
+    }
+
+    void set_status(const bool status) {
+        this->status = status;
+    }
+
+    [[nodiscard]] Moneda get_moneda() const {
+        return moneda;
+    }
+
+    [[nodiscard]] string get_tip() const {
+        return tip;
+    }
+
+    [[nodiscard]] double get_cantitate() const {
+        return cantitate;
+    }
+
+    [[nodiscard]] bool get_status() const {
+        return status;
+    }
+
+    double get_valoareTranzactie() const {
+        return cantitate * moneda.get_pret();
+    }
 
     friend ostream &operator<<(ostream &os, const Tranzactie &tranzactie) {
         os << "[" << tranzactie.tip << "]: " << tranzactie.moneda.get_simbol() << " " << tranzactie.cantitate << " " << tranzactie.status;
@@ -98,8 +144,10 @@ private:
 
 public:
     Portofel() = default;
-    explicit Portofel(const vector<Tranzactie> &tranzactii) : tranzactii(tranzactii) {
-        for (auto &tranzactie : tranzactii) {
+
+    Portofel(const vector<Tranzactie> &tranzactii)
+        : tranzactii(tranzactii) {
+        for (const auto &tranzactie : tranzactii) {
             if (tranzactie.get_status()) {
                 bool moneda_gasita = false;
                 for (auto &moneda : monede) {
@@ -112,10 +160,16 @@ public:
                         break;
                     }
                 }
-                if (!moneda_gasita && tranzactie.get_tip() == "BUY")
+                if (!moneda_gasita && tranzactie.get_tip() == "BUY") {
                     monede.push_back({tranzactie.get_moneda(), tranzactie.get_cantitate()});
+                }
             }
         }
+    }
+
+    ~Portofel() {
+        monede.clear();
+        tranzactii.clear();
     }
 
     bool cumparaMoneda(const Moneda &m, double cantitate) {
@@ -167,33 +221,50 @@ private:
     Portofel portofel;
 
 public:
-    explicit Utilizator(const string &nume) : nume(nume) {}
-    Utilizator(const string &nume, const Portofel &portofel) : nume(nume), portofel(portofel) {}
+    Utilizator() = default;
 
-    void cumpara(const Moneda &moneda, double cantitate) { portofel.cumparaMoneda(moneda, cantitate); }
-    void vinde(const Moneda &moneda, double cantitate) { portofel.vindeMoneda(moneda, cantitate); }
-    void afiseazaPortofel() const { cout << portofel; }
+    Utilizator(const string &nume)
+        : nume(nume) {
+    }
+
+    Utilizator(const string &nume, const Portofel &portofel)
+        : nume(nume), portofel(portofel) {
+    }
+
+    ~Utilizator() = default;
+
+    void cumpara(const Moneda &moneda, double cantitate) {
+        portofel.cumparaMoneda(moneda, cantitate);
+    }
+
+    void vinde(const Moneda &moneda, double cantitate) {
+        portofel.vindeMoneda(moneda, cantitate);
+    }
 
     friend ostream &operator<<(ostream &os, const Utilizator &utilizator) {
-        os << "Utilizator: " << utilizator.nume << "\n";
+        os << utilizator.nume << ":\n";
+        os << utilizator.portofel;
         return os;
     }
 };
 
 int main() {
-    Moneda bitcoin("Bitcoin", "BTC", 50000, 0.2);
-    Moneda ethereum("Ethereum", "ETH", 4000, 0.15);
+    Moneda btc("Bitcoin", "BTC", 68000, 5.2);
+    Moneda new_btc;
+    new_btc = btc;
+    btc.actualizarePret(-2.5);
+    cout << btc << endl;
+    cout << new_btc << endl;
 
-    vector<Tranzactie> tranzactii = {
-        Tranzactie(bitcoin, "BUY", 2.0, true),
-        Tranzactie(ethereum, "BUY", 10.0, true),
-        Tranzactie(bitcoin, "SELL", 1.0, true)
-    };
+    Tranzactie t1(btc, "BUY", 5, true);
+    cout << t1.get_valoareTranzactie() << " EUR" << endl;
+    cout << t1 << endl;
 
-    Portofel portofel(tranzactii);
-    Utilizator utilizator("Ion", portofel);
+    Utilizator user("John Doe");
+    user.cumpara(btc, 2);
+    cout << user;
 
-    utilizator.afiseazaPortofel();
-
+    user.vinde(btc, 3);
+    cout << user;
     return 0;
 }
