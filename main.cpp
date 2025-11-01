@@ -206,11 +206,11 @@ public:
     }
 
     void cumpara (const Moneda& moneda, double cantitate) {
-        int status=portofel.cumparaMoneda(moneda,cantitate);
+        bool status=portofel.cumparaMoneda(moneda,cantitate);
         tranzactii.push_back(Tranzactie(moneda,"BUY",cantitate,status));
     }
     void vinde (const Moneda& moneda, double cantitate) {
-        int status=portofel.vindeMoneda(moneda,cantitate);
+        bool status=portofel.vindeMoneda(moneda,cantitate);
         tranzactii.push_back(Tranzactie(moneda,"SELL",cantitate,status));
     }
 
