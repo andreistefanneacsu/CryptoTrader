@@ -42,19 +42,19 @@ public:
         this->volatilitate = volatilitate;
     }
 
-    [[nodiscard]] string get_nume() const {
+    [[nodiscard]] const string& get_nume() const {
         return nume;
     }
 
-    [[nodiscard]] string get_simbol() const {
+    [[nodiscard]] const string& get_simbol() const {
         return simbol;
     }
 
-    [[nodiscard]] double get_pret() const {
+    [[nodiscard]] const double& get_pret() const {
         return pret;
     }
 
-    [[nodiscard]] double get_volatilitate() const {
+    [[nodiscard]] const double& get_volatilitate() const {
         return volatilitate;
     }
 
@@ -226,7 +226,7 @@ private:
 public:
     Utilizator() = default;
 
-    Utilizator(const string &nume)
+    explicit Utilizator(const string &nume)
         : nume(nume) {
     }
 
