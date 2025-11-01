@@ -86,7 +86,9 @@ private:
     bool status;
 
 public:
-    Tranzactie() = default;
+    Tranzactie()
+        : tip(""), cantitate(0), status(false) {
+    }
     Tranzactie(const Moneda &moneda, const string &tip, const double cantitate, const bool status)
         : moneda(moneda), tip(tip), cantitate(cantitate), status(status) {
     }
@@ -146,8 +148,7 @@ private:
 
 public:
     Portofel() = default;
-
-    Portofel(const vector<Tranzactie> &tranzactii)
+    explicit Portofel(const vector<Tranzactie> &tranzactii)
         : tranzactii(tranzactii) {
         for (const auto &tranzactie : tranzactii) {
             if (tranzactie.get_status()) {
