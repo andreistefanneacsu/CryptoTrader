@@ -13,7 +13,9 @@ private:
     double volatilitate;
 
 public:
-    Moneda() = default;
+    Moneda()
+        : nume(""), simbol(""), pret(0), volatilitate(0) {
+    }
     Moneda(const string &nume, const string &simbol, const double pret, const double volatilitate)
         : nume(nume), simbol(simbol), pret(pret), volatilitate(volatilitate) {
     }
