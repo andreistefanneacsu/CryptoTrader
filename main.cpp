@@ -26,36 +26,12 @@ public:
 
     ~Moneda() = default;
 
-    void set_nume(const string &nume) {
-        this->nume = nume;
-    }
-
-    void set_simbol(const string &simbol) {
-        this->simbol = simbol;
-    }
-
-    void set_pret(const double pret) {
-        this->pret = pret;
-    }
-
-    void set_volatilitate(const double volatilitate) {
-        this->volatilitate = volatilitate;
-    }
-
-    [[nodiscard]] const string& get_nume() const {
-        return nume;
-    }
-
     [[nodiscard]] const string& get_simbol() const {
         return simbol;
     }
 
     [[nodiscard]] const double& get_pret() const {
         return pret;
-    }
-
-    [[nodiscard]] const double& get_volatilitate() const {
-        return volatilitate;
     }
 
     void actualizarePret(double procent) {
@@ -98,32 +74,16 @@ public:
     }
 
     ~Tranzactie() = default;
-
-    void set_moneda(const Moneda &moneda) {
-        this->moneda = moneda;
-    }
-
-    void set_tip(const string &tip) {
-        this->tip = tip;
-    }
-
-    void set_cantitate(const double cantitate) {
-        this->cantitate = cantitate;
-    }
-
-    void set_status(const bool status) {
-        this->status = status;
-    }
-
-    [[nodiscard]] Moneda get_moneda() const {
+    
+    [[nodiscard]] const Moneda& get_moneda() const {
         return moneda;
     }
 
-    [[nodiscard]] string get_tip() const {
+    [[nodiscard]] const string& get_tip() const {
         return tip;
     }
 
-    [[nodiscard]] double get_cantitate() const {
+    [[nodiscard]] const double& get_cantitate() const {
         return cantitate;
     }
 
