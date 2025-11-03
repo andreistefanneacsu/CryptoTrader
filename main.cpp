@@ -251,7 +251,7 @@ public:
     }
     ~Utilizator() = default;
 
-    [[nodiscard]] string get_nume() const {
+    [[nodiscard]] const string& get_nume() const {
         return nume;
     }
 
