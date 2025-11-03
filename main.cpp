@@ -106,9 +106,9 @@ public:
         return status;
     }
 
-    double get_ValoareTranzactie() const {
+/*    double get_ValoareTranzactie() const {
         return cantitate * pret;
-    }
+    } */
 
     friend ostream &operator<<(ostream &os, const Tranzactie &tranzactie) {
         os << "[" << tranzactie.tip << "]: " << tranzactie.moneda.get_simbol() << " " << tranzactie.cantitate << " " << tranzactie.status;
@@ -123,7 +123,7 @@ private:
 
 public:
     Portofel() = default;
-    Portofel(const vector<Tranzactie> &tranzactii)
+    explicit Portofel(const vector<Tranzactie> &tranzactii)
     : tranzactii(tranzactii) {
         for (vector<Tranzactie>::const_iterator tranzactie = tranzactii.begin(); tranzactie != tranzactii.end(); ++tranzactie) {
             if (tranzactie->get_status() == SUCCES) {
@@ -239,7 +239,7 @@ class Utilizator {
 private:
     string nume;
     Portofel portofel;
-    string statut;
+//    string statut;
 
 public:
     Utilizator() = default;
@@ -307,13 +307,13 @@ public:
         return utilizatori;
     }
 
-    bool adaugaMoneda(const Moneda& m) {
+/*    bool adaugaMoneda(const Moneda& m) {
         for (vector<Moneda>::const_iterator moneda=monede.begin(); moneda!=monede.end(); ++moneda) if (moneda->get_simbol()==m.get_simbol()) return false;
         monede.push_back(m);
         return true;
-    }
+    } */
 
-    bool stergeMoneda(const string &simbol) {
+/*    bool stergeMoneda(const string &simbol) {
         for (vector<Moneda>::iterator moneda=monede.begin(); moneda!=monede.end(); ) {
             if (moneda->get_simbol() == simbol) {
                 moneda=monede.erase(moneda);
@@ -322,7 +322,7 @@ public:
             else ++moneda;
         }
         return false;
-    }
+    } */
 
     void actualizarePiata() {
         for (vector<Moneda>::iterator moneda=monede.begin(); moneda!=monede.end(); ++moneda) {
@@ -451,6 +451,8 @@ int main() {
     Piata piata2 = incarcaPiata(fisier);
 
     cout << "\n=== Portofel final ===\n" << user;
+
+    cout << "\n=== Piata noua ===\n" << piata2;
 
     return 0;
 }
