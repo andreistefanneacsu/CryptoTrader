@@ -36,7 +36,7 @@ public:
     }
     ~Moneda() = default;
 
-    [[nodiscard]] string get_nume() const {
+    [[nodiscard]] const string& get_nume() const {
         return nume;
     }
 
@@ -158,7 +158,7 @@ public:
         tranzactii.clear();
     }
 
-    [[nodiscard]] vector<Tranzactie> get_tranzactii() const {
+    [[nodiscard]] const vector<Tranzactie>& get_tranzactii() const {
         return tranzactii;
     }
 
@@ -255,7 +255,7 @@ public:
         return nume;
     }
 
-    [[nodiscard]] Portofel get_portofel() const {
+    [[nodiscard]] const Portofel& get_portofel() const {
         return portofel;
     }
 
@@ -299,11 +299,11 @@ public:
     }
     ~Piata() = default;
 
-    [[nodiscard]] vector<Moneda> get_monede() const {
+    [[nodiscard]] const vector<Moneda>& get_monede() const {
         return monede;
     }
 
-    [[nodiscard]] vector<Utilizator> get_utilizatori() const {
+    [[nodiscard]] const vector<Utilizator>& get_utilizatori() const {
         return utilizatori;
     }
 
