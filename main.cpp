@@ -92,16 +92,38 @@ void demoDynamicCast() {
             std::cout << "FiatCoin gasit: " << fiat->get_nume()
                       << " (" << fiat->get_cod_iso() << ")\n";
             std::cout << "Putere cumparare: " << fiat->calculeazaPutereCumparare() << "\n";
+            std::cout << "Tara emitenta: " << fiat->get_tara_emitenta() << "\n";
+            std::cout << "Rata dobanda: " << fiat->get_rata_dobanda() << "%\n";
+            std::cout << "Inflatie: " << fiat->get_inflatie() << "%\n";
         }
 
         if (const auto* stable = dynamic_cast<const StableCoin*>(moneda)) {
             std::cout << "StableCoin: " << stable->get_nume()
                       << " colateralizat la " << stable->get_raport_colateralizare() << "%\n";
+            std::cout << "Emitent: " << stable->get_emitent() << "\n";
+            std::cout << "Moneda legatura: " << stable->get_moneda_legatura() << "\n";
         }
 
         if (const auto* altcoin = dynamic_cast<const Altcoin*>(moneda)) {
             std::cout << "Altcoin: " << altcoin->get_nume()
                       << " - scor tehnologie: " << altcoin->get_scor_tehnologie() << "\n";
+            std::cout << "Scalabilitate: " << altcoin->get_scalabilitate() << "\n";
+            std::cout << "Interoperabilitate: " << altcoin->get_interoperabilitate() << "\n";
+            std::cout << "Risc calculat: " << altcoin->calculeazaRisc() << "\n";
+            std::cout << "Potential calculat: " << altcoin->calculeazaPotential() << "\n";
+        }
+
+        if (const auto* meme = dynamic_cast<const MemeCoin*>(moneda)) {
+            std::cout << "MemeCoin: " << meme->get_nume()
+                      << " - factor meme: " << meme->get_factor_meme() << "\n";
+            std::cout << "Nivel hype: " << meme->get_nivel_hype() << "\n";
+            std::cout << "Scor comunitate: " << meme->get_scor_comunitate() << "\n";
+        }
+
+        if (const auto* bluechip = dynamic_cast<const BlueChipCoin*>(moneda)) {
+            std::cout << "BlueChipCoin: " << bluechip->get_nume()
+                      << " - capital piata: " << bluechip->get_capital_piata() << "B\n";
+            std::cout << "Factor incredere: " << bluechip->get_factor_incredere() << "\n";
         }
     }
 
@@ -126,6 +148,9 @@ void demoCopySwap() {
 
     std::cout << "Analizoare active: " << AnalizatorPiata::get_numar_analizoare_active() << "\n";
     std::cout << "Volatilitate medie: " << analizator3.calculeazaVolatilitateMedie() << "%\n";
+
+    analizator2.actualizeazaToateMonedele();
+    AnalizatorPiata::reseteaza_contor();
 }
 
 void demoExceptii() {
@@ -195,11 +220,14 @@ void demoFunctiiNivelInalt() {
     std::cout << "Statistici trader:\n";
     std::cout << "Valoare portofel: " << trader.get_portofel().get_ValoarePortofel() << " RON\n";
     std::cout << "Profit total: " << trader.get_portofel().get_ProfitTotal() << " RON\n";
+    std::cout << "Balanța RON: " << trader.get_balanta_fiat() << " RON\n";
 
     auto estimare = trader.get_portofel().estimareProfitTotal();
     std::cout << "Estimare profit: " << estimare.first << " ... " << estimare.second << " RON\n";
 
+    trader.determinareValoarePortofel();
     trader.determinareProfitPosibil();
+    trader.determinareProfitTotal();
 
     delete piata;
 }
@@ -224,47 +252,78 @@ void demoNouaClasaDerivata() {
     delete sol;
 }
 
-void testareFunctiiUtilizate() {
+void testareSetPret() {
+    std::cout << "\n=== TESTARE SET_PRET ===\n";
+
+    Piata* piata = creazaPiata();
+    Moneda* moneda = piata->find_moneda("BTC");
+
+    double pretVechi = moneda->get_pret();
+    moneda->set_pret(31000);
+    double pretNou = moneda->get_pret();
+
+    std::cout << "BTC pret modificat: " << pretVechi << " -> " << pretNou << " RON\n";
+
+    delete piata;
+}
+
+void testareTranzactii() {
+    std::cout << "\n=== TESTARE TRANZACTII ===\n";
+
     Piata* piata = creazaPiata();
     Utilizator trader("Test");
-    trader.topUpFiat(5000);
+    trader.topUpFiat(10000);
 
-    trader.cumpara(piata->find_moneda("BTC"), 1000);
-
-    double balanta = trader.get_balanta_fiat();
-    trader.determinareValoarePortofel();
-    trader.determinareProfitTotal();
-
-    Moneda* moneda = piata->find_moneda("EUR");
-    if (auto* fiat = dynamic_cast<FiatCoin*>(moneda)) {
-        std::string tara = fiat->get_tara_emitenta();
-        double dobanda = fiat->get_rata_dobanda();
-        double inflatie = fiat->get_inflatie();
-    }
-
-    if (auto* meme = dynamic_cast<MemeCoin*>(piata->find_moneda("DOGE"))) {
-        double factor = meme->get_factor_meme();
-        double hype = meme->get_nivel_hype();
-        double comunitate = meme->get_scor_comunitate();
-    }
-
-    if (auto* bluechip = dynamic_cast<BlueChipCoin*>(piata->find_moneda("BTC"))) {
-        double capital = bluechip->get_capital_piata();
-        double incredere = bluechip->get_factor_incredere();
-    }
-
-    if (auto* stable = dynamic_cast<StableCoin*>(piata->find_moneda("USDT"))) {
-        std::string emitent = stable->get_emitent();
-        std::string legatura = stable->get_moneda_legatura();
-    }
+    trader.cumpara(piata->find_moneda("BTC"), 5000);
+    trader.cumpara(piata->find_moneda("ETH"), 2000);
 
     const auto& tranzactii = trader.get_portofel().get_tranzactii();
+    std::cout << "Numar tranzactii: " << tranzactii.size() << "\n";
 
-    moneda->set_pret(31000);
+    for (const auto* tranzactie : tranzactii) {
+        std::cout << "Tranzactie: " << *tranzactie << "\n";
+    }
+
+    delete piata;
+}
+
+void testarePiataActualizare() {
+    std::cout << "\n=== TESTARE ACTUALIZARE PIATA ===\n";
+
+    Piata* piata = creazaPiata();
+
+    std::cout << "Preturi inainte de actualizare:\n";
+    for (const auto* moneda : piata->get_monede()) {
+        std::cout << moneda->get_simbol() << ": " << moneda->get_pret() << " RON\n";
+    }
 
     piata->actualizarePiata();
 
-    AnalizatorPiata::reseteaza_contor();
+    std::cout << "\nPreturi dupa actualizare:\n";
+    for (const auto* moneda : piata->get_monede()) {
+        std::cout << moneda->get_simbol() << ": " << moneda->get_pret() << " RON\n";
+    }
+
+    delete piata;
+}
+
+void testarePortofelFunctii() {
+    std::cout << "\n=== TESTARE FUNCTII PORTOFEL ===\n";
+
+    Piata* piata = creazaPiata();
+    Utilizator trader("TestPortofel");
+    trader.topUpFiat(15000);
+
+    trader.cumpara(piata->find_moneda("BTC"), 5000);
+    trader.cumpara(piata->find_moneda("ETH"), 3000);
+    trader.cumpara(piata->find_moneda("ADA"), 1000);
+
+    const auto& monedePortofel = trader.get_portofel().get_monede();
+    std::cout << "Monede in portofel: " << monedePortofel.size() << "\n";
+
+    for (const auto& moneda : monedePortofel) {
+        std::cout << moneda.first->get_simbol() << ": " << moneda.second.first << " bucati\n";
+    }
 
     delete piata;
 }
@@ -285,9 +344,11 @@ int main() {
         demoSTL();
         demoFunctiiNivelInalt();
         demoNouaClasaDerivata();
-
-        testareFunctiiUtilizate();
-
+        testareSetPret();
+        testareTranzactii();
+        testarePiataActualizare();
+        testarePortofelFunctii();
+        
     } catch (const std::exception& e) {
         std::cerr << "\nEROARE: " << e.what() << "\n";
         return 1;
