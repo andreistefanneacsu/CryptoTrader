@@ -18,6 +18,21 @@
 #include "AnalizatorPiata.hpp"
 #include "Exceptions.hpp"
 
+// Functie pentru a crea monede cu smart pointers pentru AnalizatorPiata
+std::vector<std::shared_ptr<Moneda>> creazaMonedeShared() {
+    std::vector<std::shared_ptr<Moneda>> monede;
+
+    monede.push_back(std::make_shared<BlueChipCoin>("Bitcoin", "BTC", 30000, 3.0, 900, 0.9));
+    monede.push_back(std::make_shared<BlueChipCoin>("Ethereum", "ETH", 1800, 4.0, 450, 0.85));
+    monede.push_back(std::make_shared<StableCoin>("Tether", "USDT", 1.0, 0.2, "Tether Ltd", "USD", 110));
+    monede.push_back(std::make_shared<MemeCoin>("Dogecoin", "DOGE", 0.1, 15, 80, 0.6, 0.9));
+    monede.push_back(std::make_shared<FiatCoin>("Euro", "EUR", 4.9, 0.5, "Uniunea Europeana", "EUR", 4.5, 2.1));
+    monede.push_back(std::make_shared<Altcoin>("Cardano", "ADA", 0.4, 8.5, 0.7, 0.4, 85));
+
+    return monede;
+}
+
+// Functie veche pentru compatibilitate cu restul codului
 Piata* creazaPiata() {
     std::vector<Moneda*> monede;
 
@@ -34,18 +49,11 @@ Piata* creazaPiata() {
 void demoIerarhieMonede() {
     std::cout << "\n=== DEMO IERARHIE MONEDE ===\n";
 
-    std::vector<Moneda*> monede;
-    monede.push_back(new BlueChipCoin("Bitcoin", "BTC", 30000, 3.0, 900, 0.9));
-    monede.push_back(new StableCoin("Tether", "USDT", 1.0, 0.2, "Tether Ltd", "USD", 110));
-    monede.push_back(new MemeCoin("Dogecoin", "DOGE", 0.1, 15, 80, 0.6, 0.9));
-    monede.push_back(new FiatCoin("Euro", "EUR", 4.9, 0.5, "Uniunea Europeana", "EUR", 4.5, 2.1));
-    monede.push_back(new Altcoin("Cardano", "ADA", 0.4, 8.5, 0.7, 0.4, 85));
+    auto monede = creazaMonedeShared();
 
-    for (const auto* moneda : monede) {
+    for (const auto& moneda : monede) {
         std::cout << "\n" << *moneda;
     }
-
-    for (auto* m : monede) delete m;
 }
 
 void demoFunctiiVirtuale() {
@@ -133,16 +141,15 @@ void demoDynamicCast() {
 void demoCopySwap() {
     std::cout << "\n=== DEMO COPY AND SWAP ===\n";
 
-    AnalizatorPiata analizator1;
-    {
-        Piata* piata = creazaPiata();
-        for (auto* moneda : piata->get_monede()) {
-            analizator1.adaugaMoneda(moneda);
-        }
-        delete piata;
-    }
+    // Folosim smart pointers pentru a evita heap-use-after-free
+    auto monede = creazaMonedeShared();
 
+    AnalizatorPiata analizator1(monede);
+
+    // Test copy constructor
     AnalizatorPiata analizator2 = analizator1;
+
+    // Test copy assignment
     AnalizatorPiata analizator3;
     analizator3 = analizator2;
 
@@ -181,10 +188,7 @@ void demoExceptii() {
 void demoSmartPointers() {
     std::cout << "\n=== DEMO SMART POINTERS ===\n";
 
-    std::vector<std::unique_ptr<Moneda>> monede;
-    monede.push_back(std::make_unique<BlueChipCoin>("Bitcoin", "BTC", 30000, 3.0, 900, 0.9));
-    monede.push_back(std::make_unique<StableCoin>("Tether", "USDT", 1.0, 0.2, "Tether Ltd", "USD", 110));
-    monede.push_back(std::make_unique<Altcoin>("Solana", "SOL", 20, 12, 0.8, 0.6, 88));
+    auto monede = creazaMonedeShared();
 
     for (const auto& moneda : monede) {
         std::cout << *moneda << "\n";
@@ -194,16 +198,15 @@ void demoSmartPointers() {
 void demoSTL() {
     std::cout << "\n=== DEMO UTILIZARE STL ===\n";
 
-    Piata* piata = creazaPiata();
-    AnalizatorPiata analizator(piata->get_monede());
+    // Creaza monede separate pentru acest demo
+    auto monede = creazaMonedeShared();
+    AnalizatorPiata analizator(monede);
 
     auto volatileMonede = analizator.filtreazaMonedeDupaVolatilitate(5, 20);
     std::cout << "Monede volatile (5%-20%):\n";
-    for (const auto* moneda : volatileMonede) {
+    for (const auto& moneda : volatileMonede) {
         std::cout << "  " << moneda->get_simbol() << ": " << moneda->get_volatilitate() << "%\n";
     }
-
-    delete piata;
 }
 
 void demoFunctiiNivelInalt() {
@@ -235,8 +238,8 @@ void demoFunctiiNivelInalt() {
 void demoNouaClasaDerivata() {
     std::cout << "\n=== DEMO NOUA CLASA DERIVATA (ALTCOIN) ===\n";
 
-    Altcoin* ada = new Altcoin("Cardano", "ADA", 0.4, 8.5, 0.7, 0.4, 85);
-    Altcoin* sol = new Altcoin("Solana", "SOL", 20, 12, 0.8, 0.6, 88);
+    auto ada = std::make_shared<Altcoin>("Cardano", "ADA", 0.4, 8.5, 0.7, 0.4, 85);
+    auto sol = std::make_shared<Altcoin>("Solana", "SOL", 20, 12, 0.8, 0.6, 88);
 
     std::cout << *ada << "\n";
     std::cout << *sol << "\n";
@@ -247,9 +250,6 @@ void demoNouaClasaDerivata() {
     std::cout << "Dupa actualizare:\n";
     std::cout << *ada << "\n";
     std::cout << *sol << "\n";
-
-    delete ada;
-    delete sol;
 }
 
 void testareSetPret() {
