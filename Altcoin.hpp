@@ -20,7 +20,7 @@ public:
 
     Altcoin(const Altcoin& other);
     Altcoin& operator=(Altcoin other);
-    ~Altcoin() = default;
+    ~Altcoin() override = default;
 
     void swap(Altcoin& other) noexcept;
 
