@@ -81,7 +81,7 @@ bool Portofel::cumparaMoneda(Moneda* m, double cantitate) {
 
     return true;
 }
-
+/*
 bool Portofel::vindeMoneda(Moneda* m, double cantitate) {
 
     for (auto& moneda : monede) {
@@ -118,6 +118,7 @@ bool Portofel::vindeMoneda(Moneda* m, double cantitate) {
     );
     return false;
 }
+*/
 
 double Portofel::get_ValoarePortofel() const {
     double total = 0;
