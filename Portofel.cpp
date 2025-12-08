@@ -10,7 +10,7 @@ Portofel::Portofel() = default;
 Portofel::Portofel(const std::vector<Tranzactie*>& tranzactii_init)
         : tranzactii(tranzactii_init)
 {
-    for (auto tranzactie : tranzactii_init) {
+    for (const auto* tranzactie : tranzactii_init) {
         if (tranzactie->get_status() == SUCCES) {
             bool moneda_gasita = false;
 

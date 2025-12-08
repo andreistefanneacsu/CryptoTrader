@@ -33,17 +33,17 @@ double AnalizatorPiata::calculeazaVolatilitateMedie() const {
     if (monede.empty()) return 0.0;
     
     double suma = std::accumulate(monede.begin(), monede.end(), 0.0,
-        [](double acc, Moneda* moneda) {
+        [](double acc, const Moneda* moneda) {
             return acc + moneda->get_volatilitate();
         });
-    
+
     return suma / monede.size();
 }
 
 std::vector<Moneda*> AnalizatorPiata::filtreazaMonedeDupaVolatilitate(double min, double max) const {
     std::vector<Moneda*> rezultat;
     std::copy_if(monede.begin(), monede.end(), std::back_inserter(rezultat),
-        [min, max](Moneda* moneda) {
+        [min, max](const Moneda* moneda) {
             double vol = moneda->get_volatilitate();
             return vol >= min && vol <= max;
         });

@@ -41,7 +41,7 @@ void demoIerarhieMonede() {
     monede.push_back(new FiatCoin("Euro", "EUR", 4.9, 0.5, "Uniunea Europeana", "EUR", 4.5, 2.1));
     monede.push_back(new Altcoin("Cardano", "ADA", 0.4, 8.5, 0.7, 0.4, 85));
 
-    for (auto* moneda : monede) {
+    for (const auto* moneda : monede) {
         std::cout << "\n" << *moneda;
     }
 
@@ -87,19 +87,19 @@ void demoDynamicCast() {
 
     Piata* piata = creazaPiata();
 
-    for (auto* moneda : piata->get_monede()) {
-        if (auto* fiat = dynamic_cast<FiatCoin*>(moneda)) {
+    for (const auto* moneda : piata->get_monede()) {
+        if (const auto* fiat = dynamic_cast<const FiatCoin*>(moneda)) {
             std::cout << "FiatCoin gasit: " << fiat->get_nume()
                       << " (" << fiat->get_cod_iso() << ")\n";
             std::cout << "Putere cumparare: " << fiat->calculeazaPutereCumparare() << "\n";
         }
 
-        if (auto* stable = dynamic_cast<StableCoin*>(moneda)) {
+        if (const auto* stable = dynamic_cast<const StableCoin*>(moneda)) {
             std::cout << "StableCoin: " << stable->get_nume()
                       << " colateralizat la " << stable->get_raport_colateralizare() << "%\n";
         }
 
-        if (auto* altcoin = dynamic_cast<Altcoin*>(moneda)) {
+        if (const auto* altcoin = dynamic_cast<const Altcoin*>(moneda)) {
             std::cout << "Altcoin: " << altcoin->get_nume()
                       << " - scor tehnologie: " << altcoin->get_scor_tehnologie() << "\n";
         }
@@ -150,13 +150,6 @@ void demoExceptii() {
         std::cout << "Exceptie standard: " << e.what() << "\n";
     }
 
-    try {
-        trader.vinde(nullptr, 10);
-    }
-    catch (const EroareMonedaInexistenta& e) {
-        std::cout << "Exceptie prinsa: " << e.what() << "\n";
-    }
-
     delete piata;
 }
 
@@ -181,7 +174,7 @@ void demoSTL() {
 
     auto volatileMonede = analizator.filtreazaMonedeDupaVolatilitate(5, 20);
     std::cout << "Monede volatile (5%-20%):\n";
-    for (auto* moneda : volatileMonede) {
+    for (const auto* moneda : volatileMonede) {
         std::cout << "  " << moneda->get_simbol() << ": " << moneda->get_volatilitate() << "%\n";
     }
 
@@ -231,10 +224,55 @@ void demoNouaClasaDerivata() {
     delete sol;
 }
 
+void testareFunctiiUtilizate() {
+    Piata* piata = creazaPiata();
+    Utilizator trader("Test");
+    trader.topUpFiat(5000);
+
+    trader.cumpara(piata->find_moneda("BTC"), 1000);
+
+    double balanta = trader.get_balanta_fiat();
+    trader.determinareValoarePortofel();
+    trader.determinareProfitTotal();
+
+    Moneda* moneda = piata->find_moneda("EUR");
+    if (auto* fiat = dynamic_cast<FiatCoin*>(moneda)) {
+        std::string tara = fiat->get_tara_emitenta();
+        double dobanda = fiat->get_rata_dobanda();
+        double inflatie = fiat->get_inflatie();
+    }
+
+    if (auto* meme = dynamic_cast<MemeCoin*>(piata->find_moneda("DOGE"))) {
+        double factor = meme->get_factor_meme();
+        double hype = meme->get_nivel_hype();
+        double comunitate = meme->get_scor_comunitate();
+    }
+
+    if (auto* bluechip = dynamic_cast<BlueChipCoin*>(piata->find_moneda("BTC"))) {
+        double capital = bluechip->get_capital_piata();
+        double incredere = bluechip->get_factor_incredere();
+    }
+
+    if (auto* stable = dynamic_cast<StableCoin*>(piata->find_moneda("USDT"))) {
+        std::string emitent = stable->get_emitent();
+        std::string legatura = stable->get_moneda_legatura();
+    }
+
+    const auto& tranzactii = trader.get_portofel().get_tranzactii();
+
+    moneda->set_pret(31000);
+
+    piata->actualizarePiata();
+
+    AnalizatorPiata::reseteaza_contor();
+
+    delete piata;
+}
+
 int main() {
     std::cout << "=== CRYPTOTRADER++ - PROIECT OOP COMPLET ===\n";
 
-    srand(time(NULL));
+    srand(static_cast<unsigned>(time(nullptr)));
 
     try {
         demoIerarhieMonede();
@@ -247,6 +285,8 @@ int main() {
         demoSTL();
         demoFunctiiNivelInalt();
         demoNouaClasaDerivata();
+
+        testareFunctiiUtilizate();
 
     } catch (const std::exception& e) {
         std::cerr << "\nEROARE: " << e.what() << "\n";
