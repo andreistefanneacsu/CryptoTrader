@@ -49,7 +49,18 @@ include(cmake/CopyHelper.cmake)
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
 add_executable(${MAIN_EXECUTABLE_NAME}
-    main.cpp
+        main.cpp
+        Moneda.cpp
+        Tranzactie.cpp
+        Portofel.cpp
+        Utilizator.cpp
+        Piata.cpp
+        BlueChipCoin.cpp
+        StableCoin.cpp
+        MemeCoin.cpp
+        FiatCoin.cpp
+        Altcoin.cpp
+        AnalizatorPiata.cpp
 )
 
 # NOTE: Add all defined targets (e.g. executables, libraries, etc. )
