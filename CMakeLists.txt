@@ -59,7 +59,7 @@ add_executable(${MAIN_EXECUTABLE_NAME}
         StableCoin.cpp
         MemeCoin.cpp
         FiatCoin.cpp
-        Altcoin.cpp
+        AltCoin.cpp
         AnalizatorPiata.cpp
 )
 
