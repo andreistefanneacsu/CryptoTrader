@@ -28,6 +28,7 @@ bool Utilizator::cumpara(Moneda* moneda, const double suma) {
     return succes;
 }
 
+/*
 bool Utilizator::vinde(Moneda* moneda, double cantitate) {
     const auto& monede = portofel.get_monede();
     bool areSuficient = false;
@@ -50,6 +51,7 @@ bool Utilizator::vinde(Moneda* moneda, double cantitate) {
 
     return succes;
 }
+*/
 
 void Utilizator::topUpFiat(double suma) {
         balanteFiat += suma;
