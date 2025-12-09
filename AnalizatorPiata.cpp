@@ -56,6 +56,8 @@ void AnalizatorPiata::actualizeazaToateMonedele() {
     }
 }
 
+/*
 void AnalizatorPiata::adaugaMoneda(std::shared_ptr<Moneda> moneda) {
     monede.push_back(moneda);
 }
+*/
