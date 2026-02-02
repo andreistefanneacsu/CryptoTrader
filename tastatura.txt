@@ -1,2 +1,291 @@
+# ============================================================================
+# SCENARIU COMPLET - APELEAZĂ TOATE FUNCȚIILE PROGRAMULUI
+# ============================================================================
+
+# === PARTEA 1: UTILIZATOR NORMAL ===
+
+# 1. Înregistrare utilizator nou
+2
+UserFullTest
+fulltest@example.com
+password123
+10000
+
+# 2. Autentificare cu utilizatorul nou
+1
+UserFullTest
+password123
+
+# 3. VIZUALIZARE PIATA (meniul 1)
+1
+
+# 3.1 Actualizează prețurile (opțiunea 1 din piață)
+1
+
+# 3.2 Înapoi din piață (opțiunea 2)
+2
+
+# 4. DETALII MONEDĂ pentru TOATE tipurile (meniul 2)
+2
+BTC
+
+2
+ETH
+
+2
+USDT
+
+2
+DOGE
+
+2
+EUR
+
+2
+ADA
+
+# 5. CUMPĂRĂ MONEDĂ (meniul 3) - pentru fiecare tip
+# 5.1 Bitcoin
+3
+BTC
+0.01
+da
+
+# 5.2 Ethereum
+3
+ETH
+0.1
+da
+
+# 5.3 Tether
+3
+USDT
+50
+da
+
+# 5.4 Dogecoin
+3
+DOGE
+1000
+da
+
+# 5.5 Euro (simulat ca monedă)
+3
+EUR
+100
+da
+
+# 5.6 Cardano
+3
+ADA
+500
+da
+
+# 6. PORTOFEL (meniul 5)
 5
-11 22 33 44 55
+
+# 6.1 Afișează tranzacții (opțiunea 1 din portofel)
+1
+
+# 6.2 Afișează statistici (opțiunea 2 din portofel)
+2
+
+# 6.3 Înapoi (opțiunea 3 din portofel)
+3
+
+# 7. VINDE MONEDĂ (meniul 4) - vinde din fiecare
+# 7.1 Vinde jumătate din Bitcoin
+4
+BTC
+0.005
+da
+
+# 7.2 Vinde jumătate din Ethereum
+4
+ETH
+0.05
+da
+
+# 7.3 Vinde jumătate din Tether
+4
+USDT
+25
+da
+
+# 7.4 Vinde jumătate din Dogecoin
+4
+DOGE
+500
+da
+
+# 7.5 Vinde jumătate din Euro
+4
+EUR
+50
+da
+
+# 7.6 Vinde jumătate din Cardano
+4
+ADA
+250
+da
+
+# 8. DEPUNERE RON (meniul 6)
+6
+2000
+
+# 9. RETRAGERE RON (meniul 7)
+7
+1000
+
+# 10. STATISTICI PIATA (meniul 8)
+8
+
+# 10.1 Afișează monede volatile (opțiunea 1 din statistici)
+1
+10
+
+# 10.2 Înapoi (opțiunea 2 din statistici)
+2
+
+# === PARTEA 2: ADMINISTRATOR ===
+
+# 11. DECONECTARE (meniul 9)
+9
+
+# 12. Autentificare ADMIN
+3
+admin123
+
+# 13. Meniul ADMIN - Vizualizează piața
+1
+
+# 13.1 Actualizează prețurile ca admin
+1
+
+# 13.2 Înapoi
+2
+
+# 14. Meniul ADMIN - Statistici piață
+2
+
+# 15. Meniul ADMIN - Vezi toți utilizatorii (funcția nouă)
+3
+
+# 16. Meniul ADMIN - Logout
+4
+
+# === PARTEA 3: AL DOILEA UTILIZATOR ===
+
+# 17. Înregistrare alt utilizator
+2
+User2FullTest
+user2@example.com
+password456
+5000
+
+# 18. Autentificare cu al doilea utilizator
+1
+User2FullTest
+password456
+
+# 19. Testează cumpărare cu al doilea utilizator
+3
+BTC
+0.005
+da
+
+# 20. Testează vânzare cu al doilea utilizator
+4
+BTC
+0.002
+da
+
+# 21. Testează portofel cu al doilea utilizator
+5
+
+# 21.1 Afișează tranzacții
+1
+
+# 21.2 Afișează statistici
+2
+
+# 21.3 Înapoi
+3
+
+# 22. Depunere cu al doilea utilizator
+6
+1000
+
+# 23. Retragere cu al doilea utilizator
+7
+500
+
+# === PARTEA 4: SCENARII CU ERORI (pentru a testa excepțiile) ===
+
+# 24. Încearcă cumpărare cu simbol inexistent
+3
+INVALID
+100
+da
+
+# 25. Încearcă cumpărare cu cantitate invalidă
+3
+BTC
+-50
+da
+
+# 26. Încearcă vânzare cu cantitate mai mare decât ai
+4
+BTC
+1000000
+da
+
+# 27. Încearcă vânzare monedă pe care nu o ai
+4
+LTC
+10
+da
+
+# 28. Încearcă retragere sumă mai mare decât balanța
+7
+1000000
+
+# 29. Încearcă depunere sumă negativă
+6
+-1000
+
+# === PARTEA 5: FINAL ===
+
+# 30. Deconectare al doilea utilizator
+9
+
+# 31. Autentificare înapoi cu primul utilizator
+1
+UserFullTest
+password123
+
+# 32. Verifică portofel final
+5
+
+# 32.1 Afișează tranzacții
+1
+
+# 32.2 Afișează statistici
+2
+
+# 32.3 Înapoi
+3
+
+# 33. Verifică statistici piață finale
+8
+
+# 33.1 Afișează monede volatile cu prag diferit
+1
+5
+
+# 33.2 Înapoi
+2
+
+# 34. Ieșire din aplicație
+0
