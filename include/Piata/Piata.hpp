@@ -21,8 +21,8 @@ class Piata : public SingletonSablon<Piata> {
 private:
     std::vector<std::unique_ptr<Moneda>> monede;
     mutable std::mutex mutex_piata;
-    std::string fisier_date;
     std::atomic<bool> ruleaza_actualizare;
+    std::string fisier_date;
     std::thread fir_actualizare;
     std::map<std::string, std::string> istoric_preturi;
     
