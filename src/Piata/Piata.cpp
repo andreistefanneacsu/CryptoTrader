@@ -181,6 +181,7 @@ void Piata::salveaza_in_fisier() {
     fisier.close();
 }
 
+/*
 void Piata::actualizare_automata() {
     while (ruleaza_actualizare) {
         std::this_thread::sleep_for(std::chrono::seconds(30));
@@ -188,6 +189,7 @@ void Piata::actualizare_automata() {
         salveaza_in_fisier();
     }
 }
+*/
 
 void Piata::initializeaza() {
     if (!monede.empty()) return;
@@ -327,3 +329,4 @@ void Piata::afiseaza_detalii_moneda(const std::string& simbol) const {
     }
     std::cout << "Moneda cu simbolul " << simbol << " nu a fost gasita.\n";
 }
+
