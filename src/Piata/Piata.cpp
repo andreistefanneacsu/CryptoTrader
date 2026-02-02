@@ -9,9 +9,10 @@
 
 namespace fs = std::filesystem;
 
-Piata::Piata() : ruleaza_actualizare(true) {
-    fisier_date = "date/piata/piata.dat";
-
+Piata::Piata() : 
+    ruleaza_actualizare(true),
+    fisier_date("date/piata/piata.dat") {
+    
     std::string dir_path = "date/piata";
     if (!fs::exists(dir_path)) {
         fs::create_directories(dir_path);
@@ -24,7 +25,6 @@ Piata::Piata() : ruleaza_actualizare(true) {
     if (monede.empty()) {
         initializeaza();
     }
-
 }
 
 Piata::~Piata() {
@@ -329,3 +329,4 @@ void Piata::afiseaza_detalii_moneda(const std::string& simbol) const {
     std::cout << "Moneda cu simbolul " << simbol << " nu a fost gasita.\n";
 
 }
+
