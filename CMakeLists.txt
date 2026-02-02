@@ -1,17 +1,11 @@
 cmake_minimum_required(VERSION 3.26)
 
-# NOTE: update executable name in .github/workflows/cmake.yml:25 when changing executable name in this file
-# for now, the project name is used as the executable name
 set(MAIN_PROJECT_NAME "oop")
 set(MAIN_EXECUTABLE_NAME "${MAIN_PROJECT_NAME}")
 
-
 project(${MAIN_PROJECT_NAME})
-# set(CMAKE_PROJECT_VERSION_MAJOR 0)
-# set(CMAKE_PROJECT_VERSION_MINOR 0)
-# set(CMAKE_PROJECT_VERSION_PATCH 1)
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -19,74 +13,74 @@ include(cmake/Options.cmake)
 include(cmake/CompilerFlags.cmake)
 include(cmake/CopyHelper.cmake)
 
-###############################################################################
-
-# external dependencies with FetchContent
-# include(FetchContent)
-#
-# set(FETCHCONTENT_QUIET OFF)
-# set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
-#
-# NOTE: Also update env vars used for caching in
-#         - .github/actions/configure-cmake/action.yml
-#         - .github/workflows/cmake.yml
-# FetchContent_Declare(
-#         SomeLib
-#         GIT_REPOSITORY https://github.com/<SomeUser>/<SomeLib>.git
-#         GIT_TAG        <some_git_hash> # <which tag/branch @ <some_date>>
-#         GIT_SHALLOW    1  # works only with branches or tags, not with arbitrary commit hashes
-# )
-#
-# FetchContent_MakeAvailable(SomeLib)
-
-###############################################################################
-
-# external dependencies with find_package
-
-# find_package(Threads REQUIRED)
-
-###############################################################################
-
-# NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
 add_executable(${MAIN_EXECUTABLE_NAME}
-        main.cpp
-        Moneda.cpp
-        Tranzactie.cpp
-        Portofel.cpp
-        Utilizator.cpp
-        Piata.cpp
-        BlueChipCoin.cpp
-        StableCoin.cpp
-        MemeCoin.cpp
-        FiatCoin.cpp
-        Altcoin.cpp
-        AnalizatorPiata.cpp
+    main.cpp
+
+    include/Monede/Moneda.hpp
+    src/Monede/Moneda.cpp
+    
+    include/Monede/MonedaDeBaza.hpp
+    src/Monede/MonedaDeBaza.cpp
+    
+    include/Monede/MonedaStabila.hpp
+    src/Monede/MonedaStabila.cpp
+    
+    include/Monede/MonedaMeme.hpp
+    src/Monede/MonedaMeme.cpp
+    
+    include/Monede/MonedaFiat.hpp
+    src/Monede/MonedaFiat.cpp
+    
+    include/Monede/Altcoin.hpp
+    src/Monede/Altcoin.cpp
+
+    include/Piata/Piata.hpp
+    src/Piata/Piata.cpp
+    
+    include/Piata/AnalizatorPiata.hpp
+    src/Piata/AnalizatorPiata.cpp
+
+    include/Utilizator/Utilizator.hpp
+    src/Utilizator/Utilizator.cpp
+    
+    include/Utilizator/Portofel.hpp
+    src/Utilizator/Portofel.cpp
+    
+    include/Utilizator/ManagerUtilizatori.hpp
+    src/Utilizator/ManagerUtilizatori.cpp
+
+    include/Tranzactii/Tranzactie.hpp
+    src/Tranzactii/Tranzactie.cpp
+
+    include/Utilitare/InterfataTerminal.hpp
+    src/Utilitare/InterfataTerminal.cpp
+    
+    include/Utilitare/ManagerFisiere.hpp
+    src/Utilitare/ManagerFisiere.cpp
+
+    include/Utilitare/CititorFisier.hpp
+    src/Utilitare/CititorFisier.cpp
+
+    tests/TestRunner.cpp
 )
 
-# NOTE: Add all defined targets (e.g. executables, libraries, etc. )
-# NOTE: RUN_SANITIZERS is optional, if it's not present it will default to true
+
+target_include_directories(${MAIN_EXECUTABLE_NAME} PUBLIC 
+    include
+    .      # pentru fișiere din rădăcină (dacă sunt)
+)
+
 set_compiler_flags(RUN_SANITIZERS TRUE TARGET_NAMES ${MAIN_EXECUTABLE_NAME})
-# set_compiler_flags(TARGET_NAMES ${MAIN_EXECUTABLE_NAME} ${FOO} ${BAR})
-# where ${FOO} and ${BAR} represent additional executables or libraries
-# you want to compile with the set compiler flags
 
-###############################################################################
-
-# use SYSTEM so cppcheck and clang-tidy do not report warnings from these directories
-# target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ext/<SomeHppLib>/include)
-# target_include_directories(${MAIN_EXECUTABLE_NAME} SYSTEM PRIVATE ${<SomeLib>_SOURCE_DIR}/include)
-# target_link_directories(${MAIN_EXECUTABLE_NAME} PRIVATE ${<SomeLib>_BINARY_DIR}/lib)
-# target_link_libraries(${MAIN_EXECUTABLE_NAME} <SomeLib>)
-
-###############################################################################
-
-# copy binaries to "bin" folder; these are uploaded as artifacts on each release
-# DESTINATION_DIR is set as "bin" in cmake/Options.cmake:6
 install(TARGETS ${MAIN_EXECUTABLE_NAME} DESTINATION ${DESTINATION_DIR})
 if(APPLE)
     install(FILES launcher.command DESTINATION ${DESTINATION_DIR})
 endif()
 
-copy_files(FILES tastatura.txt COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
-# copy_files(FILES tastatura.txt config.json DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
-# copy_files(DIRECTORY images sounds COPY_TO_DESTINATION TARGET_NAME ${MAIN_EXECUTABLE_NAME})
+add_custom_command(TARGET ${MAIN_EXECUTABLE_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/date/utilizatori
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/date/piata
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/date/tranzactii
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/date/logs
+    COMMENT "Se creeaza structura de directoare pentru date..."
+)
